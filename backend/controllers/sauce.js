@@ -49,3 +49,39 @@ exports.modifySauce = (req, res, next) => {
         .then(() => res.status(200).json({message: "Sauce modifiée."}))
         .catch(error => res.status(400).json({error}));
 };
+
+exports.likeSauce = (req, res, next) => {
+    Sauce.findOne({_id: req.params.id})
+        .then(sauce => {
+            const userHasLiked = sauce.usersLiked.includes(req.body.userId);
+            const userHasDisliked = sauce.usersDisliked.includes(req.body.userId);
+            if (req.body.like !== 0) {
+                if (userHasLiked || userHasDisliked) {
+                    return res.status(401).json({message: "L'utilisateur a déjà liké/disliké cette sauce."});
+                } else if (req.body.like == 1) {
+                    sauce.likes++;
+                    sauce.usersLiked.push(req.body.userId);
+                    return res.status(200).json({message: "L'utilisateur a liké la sauce."});
+                } else if (req.body.like == -1) {
+                    sauce.dislikes++;
+                    sauce.usersDisliked.push(req.body.userId);
+                    return res.status(200).json({message: "L'utilisateur a disliké la sauce."});
+                }     
+            } else {
+                if (!userHasLiked && !userHasDisliked) {
+                    return res.status(400).json({message: "L'utilisateur n'a pas encore donné son avis sur la sauce."})
+                } else if (userHasLiked) {
+                    sauce.likes--;
+                    let userIdIndex = sauce.usersLiked.indexOf(req.body.userId);
+                    sauce.usersLiked.split(userIdIndex, 1);
+                    return res.status(200).json({message: "L'utilisateur a retiré son like pour cette sauce."});
+                } else if (userHasDisliked) {
+                    sauce.dislikes--;
+                    let userIdIndex = sauce.usersDisliked.indexOf(req.body.userId);
+                    sauce.usersDisliked.split(userIdIndex, 1);
+                    return res.status(200).json({message: "L'utilisateur a retiré son dislike pour cette sauce."});
+                }
+            }
+        })
+        .catch(error => res.status(500).json({error}));
+};
