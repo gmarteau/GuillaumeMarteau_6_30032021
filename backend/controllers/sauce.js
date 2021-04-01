@@ -2,8 +2,11 @@ const Sauce = require("../models/Sauce");
 const fs = require("fs");
 
 exports.addSauce = (req, res, next) => {
+    const sauceObject = JSON.parse(req.body.sauce);
     const sauce = new Sauce({
-        ...req.body,
+        ...sauceObject,
+        likes: 0,
+        dislikes: 0,
         imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
     });
     sauce.save()
