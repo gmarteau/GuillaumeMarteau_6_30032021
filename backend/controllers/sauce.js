@@ -61,11 +61,15 @@ exports.likeSauce = (req, res, next) => {
                 } else if (req.body.like == 1) {
                     sauce.likes++;
                     sauce.usersLiked.push(req.body.userId);
-                    return res.status(200).json({message: "L'utilisateur a liké la sauce."});
+                    sauce.save()
+                        .then(() => res.status(200).json({message: "L'utilisateur a liké la sauce."}))
+                        .catch(error => res.status(400).json({error}));
                 } else if (req.body.like == -1) {
                     sauce.dislikes++;
                     sauce.usersDisliked.push(req.body.userId);
-                    return res.status(200).json({message: "L'utilisateur a disliké la sauce."});
+                    sauce.save()
+                        .then(() => res.status(200).json({message: "L'utilisateur a disliké la sauce."}))
+                        .catch(error => res.status(400).json({error}));
                 }     
             } else {
                 if (!userHasLiked && !userHasDisliked) {
@@ -73,13 +77,17 @@ exports.likeSauce = (req, res, next) => {
                 } else if (userHasLiked) {
                     sauce.likes--;
                     let userIdIndex = sauce.usersLiked.indexOf(req.body.userId);
-                    sauce.usersLiked.split(userIdIndex, 1);
-                    return res.status(200).json({message: "L'utilisateur a retiré son like pour cette sauce."});
+                    sauce.usersLiked.splice(userIdIndex, 1);
+                    sauce.save()
+                        .then(() => res.status(200).json({message: "L'utilisateur a retiré son like pour cette sauce."}))
+                        .catch(error => res.status(400).json({error}));
                 } else if (userHasDisliked) {
                     sauce.dislikes--;
                     let userIdIndex = sauce.usersDisliked.indexOf(req.body.userId);
-                    sauce.usersDisliked.split(userIdIndex, 1);
-                    return res.status(200).json({message: "L'utilisateur a retiré son dislike pour cette sauce."});
+                    sauce.usersDisliked.splice(userIdIndex, 1);
+                    sauce.save()
+                        .then(() => res.status(200).json({message: "L'utilisateur a retiré son dislike pour cette sauce."}))
+                        .catch(error => res.status(400).json({error}));
                 }
             }
         })
