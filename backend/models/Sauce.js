@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const noCodeSpecificCharacters = (input) => {
-    return /^[^=<>]*$/.test(input);
+    return /^[^=<>$]*$/.test(input);
 };
 
 const invalidInput = new Error("Le champ contient des caractères non autorisés.");

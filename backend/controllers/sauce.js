@@ -11,7 +11,12 @@ exports.addSauce = (req, res, next) => {
     });
     sauce.save()
         .then(() => res.status(201).json({message: "Sauce enregistrée."}))
-        .catch(error => res.status(500).json({error}));
+        .catch(error => {
+            const filename = sauce.imageUrl.split("/images/")[1];
+            fs.unlink(`images/${filename}`, () => {
+                return res.status(500).json({error});
+            });
+        });
 };
 
 exports.getAllSauces = (req, res, next) => {
