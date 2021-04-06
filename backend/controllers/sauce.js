@@ -14,7 +14,7 @@ exports.addSauce = (req, res, next) => {
         .catch(error => {
             const filename = sauce.imageUrl.split("/images/")[1];
             fs.unlink(`images/${filename}`, () => {
-                return res.status(500).json({error});
+                return res.status(400).json({error});
             });
         });
 };
