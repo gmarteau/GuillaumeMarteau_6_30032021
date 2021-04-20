@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const maskData = require("maskdata");
 
 const User = require("../models/User");
 
@@ -7,7 +9,7 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = new User({
-                email: req.body.email,
+                email: maskData.maskEmail2(req.body.email),
                 password: hash
             });
             user.save()
@@ -32,7 +34,7 @@ exports.login = (req, res, next) => {
                         userId: user._id,
                         token: jwt.sign(
                             {userId: user._id},
-                            "secret_key",
+                            process.env.TOKEN_KEY,
                             {expiresIn: "6h"}
                         )
                     });
