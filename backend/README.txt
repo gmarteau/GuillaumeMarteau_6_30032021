@@ -32,12 +32,12 @@ Mesures mises en oeuvre en considération de l'OWASP Top Ten
 
 2. Broken Authentication
 
-    Masquage des emails avec maskdata, chiffrement des mots de passe avec bcrypt avec un salt de 10.
+    Chiffrement des mots de passe avec bcrypt avec un salt de 10.
     Limitation du nombre de requêtes autorisées par la même adresse IP sur un laps de temps donné avec express-rate-limit sur la route /api/auth/login (vs bruteforcing).
 
 3. Sensitive Data Exposure
 
-    Masquage des emails avec maskdata, chiffrement des mots de passe avec bcrypt avec un salt de 10.
+    Chiffrement des mots de passe avec bcrypt avec un salt de 10, limitation du nombre de tentatives de connexion.
 
 4. XXE
 
@@ -59,6 +59,7 @@ Mesures mises en oeuvre en considération de l'OWASP Top Ten
 
 8. Insecure Deserialization
 
+    Le middleware d'authentification contrôle l'état du token de session (sa signature) pour pour voir donner suite à la requête.
 
 9. Using Components with Known Vulnerabilities
 
