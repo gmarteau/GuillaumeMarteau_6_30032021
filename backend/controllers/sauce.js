@@ -49,7 +49,6 @@ exports.deleteSauce = (req, res, next) => {
 exports.modifySauce = (req, res, next) => {
     const reqXss = xss(JSON.stringify(req.body));
     const reqObject = JSON.parse(reqXss);
-    console.log(JSON.parse(reqObject.sauce));
     const sauceObject = req.file ?
         {
             ...JSON.parse(reqObject.sauce),
