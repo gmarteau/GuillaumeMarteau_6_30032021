@@ -12,7 +12,9 @@ A partir du dossier backend (cd backend), exécuter la commande:
 
 npm install
 
-pour installer les dépendances, puis la commande:
+pour installer les dépendances.
+Copier ensuite le contenu de .env.dist dans un fichier .env, puis remplacer les placeholders {user}, {password} et {secret_key} par les valeurs appropriées.
+Enfin, exécuter la commande:
 
 node server [ou] nodemon server
 
